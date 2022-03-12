@@ -24,5 +24,4 @@
 
 ## Authors
 
-ex. Khaled Abdelal 
-ex. [Khaled-Abdelal](https://www.linkedin.com/in/khaled-abdelal-a73b3a125/)
+[Khaled-Abdelal](https://www.linkedin.com/in/khaled-abdelal-a73b3a125/)
