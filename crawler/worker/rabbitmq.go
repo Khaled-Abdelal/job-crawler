@@ -4,7 +4,7 @@ import (
 	"context"
 	"os"
 
-	"github.com/streadway/amqp"
+	"github.com/isayme/go-amqp-reconnect/rabbitmq"
 )
 
 // create a unique identifier for the context key
@@ -12,10 +12,10 @@ type key int
 
 const ampqSessionKeyID key = iota
 
-// ampqSession composes an amqp.Connection with an amqp.Channel
+// ampqSession composes an rabbitmq.Connection with an rabbitmq.Channel
 type ampqSession struct {
-	*amqp.Connection
-	*amqp.Channel
+	*rabbitmq.Connection
+	*rabbitmq.Channel
 }
 
 func RabbitMQSetUp(ctx context.Context) context.Context {
@@ -32,8 +32,8 @@ func GetSessionFromContext(ctx context.Context) ampqSession {
 	return ctx.Value(ampqSessionKeyID).(ampqSession)
 }
 
-func connect(url string) *amqp.Connection {
-	connectRabbitMQ, err := amqp.Dial(url)
+func connect(url string) *rabbitmq.Connection {
+	connectRabbitMQ, err := rabbitmq.Dial(url)
 	if err != nil {
 		panic(err)
 	}
@@ -45,7 +45,7 @@ func connect(url string) *amqp.Connection {
 	return connectRabbitMQ
 }
 
-func createQueues(channel *amqp.Channel) error {
+func createQueues(channel *rabbitmq.Channel) error {
 	defer channel.Close()
 	_, err := channel.QueueDeclare(
 		os.Getenv("SEARCH_WORD_TO_CRAWL_QUEUE"), // queue name
