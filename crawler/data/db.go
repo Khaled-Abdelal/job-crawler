@@ -1,6 +1,7 @@
 package data
 
 import (
+	"os"
 	"time"
 
 	"gorm.io/driver/postgres"
@@ -16,8 +17,8 @@ type SearchWord struct {
 }
 
 func GetDBConnection() (*gorm.DB, error) {
-	dsn := "host=localhost user=postgres password=password dbname=crawler port=5432 sslmode=disable"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	dbConnectionString := os.Getenv("DATABASE_URL")
+	db, err := gorm.Open(postgres.Open(dbConnectionString), &gorm.Config{})
 	db.AutoMigrate(&SearchWord{})
 	db.Create(&SearchWord{SearchWord: "f developer"})
 	return db, err

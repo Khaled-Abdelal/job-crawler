@@ -6,6 +6,11 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
 
   postgres:
     image: "postgres:13"
@@ -17,6 +22,21 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=crawler
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  crawler:
+    build: ./crawler
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    env_file:
+      - ./crawler/.env.compose
+
 
 
 volumes: 
