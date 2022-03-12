@@ -1,0 +1,23 @@
+version: "3"
+services:
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+  postgres:
+    image: "postgres:13"
+    volumes: 
+      - "pgdata:/var/lib/postgresql/data"
+    ports: 
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=crawler
+
+
+volumes: 
+  pgdata:
