@@ -5,12 +5,12 @@ type Crawler interface {
 }
 
 type Job struct {
-	title       string
+	Title       string
 	URL         string
-	source      string
-	description string
-	location    string
-	companyName string
+	Source      string
+	Description string
+	Location    string
+	CompanyName string
 }
 
 func GetActiveCrawlers() []Crawler {

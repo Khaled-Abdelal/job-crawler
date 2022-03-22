@@ -24,12 +24,12 @@ func (indeedCrawler) Crawl(jobTitle string) ([]Job, error) {
 	})
 	cc.OnHTML("a[id^=job_]", func(e *colly.HTMLElement) {
 		temp := Job{}
-		temp.title = e.ChildText("h2")
-		temp.URL = e.Attr("href")
-		temp.source = "Indeed"
-		temp.description = e.ChildText("li")
-		temp.location = e.ChildText(".companyLocation")
-		temp.companyName = e.ChildText(".companyName")
+		temp.Title = e.ChildText("h2")
+		temp.URL = "https://www.indeed.com" + e.Attr("href")
+		temp.Source = "Indeed"
+		temp.Description = e.ChildText("li")
+		temp.Location = e.ChildText(".companyLocation")
+		temp.CompanyName = e.ChildText(".companyName")
 		js = append(js, temp)
 	})
 	searchURL := fmt.Sprintf("https://www.indeed.com/q-%s-jobs.html", jobTitle)
