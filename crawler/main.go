@@ -2,11 +2,12 @@ package main
 
 import (
 	"context"
-	"crawler/cron"
-	"crawler/worker"
-	"crawler/worker/consumers"
 	"log"
 	"os"
+
+	"github.com/Khaled-Abdelal/job-crawler/crawler/cron"
+	"github.com/Khaled-Abdelal/job-crawler/crawler/worker"
+	"github.com/Khaled-Abdelal/job-crawler/crawler/worker/consumers"
 
 	"github.com/joho/godotenv"
 )

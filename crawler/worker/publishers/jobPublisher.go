@@ -2,11 +2,12 @@ package publishers
 
 import (
 	"context"
-	"crawler/crawlers"
-	"crawler/worker"
 	"encoding/json"
 	"log"
 	"os"
+
+	"github.com/Khaled-Abdelal/job-crawler/crawler/crawlers"
+	"github.com/Khaled-Abdelal/job-crawler/crawler/worker"
 
 	"github.com/streadway/amqp"
 )

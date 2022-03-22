@@ -1,6 +1,6 @@
-module crawler
+module github.com/Khaled-Abdelal/job-crawler/crawler
 
-go 1.13
+go 1.8
 
 require (
 	github.com/PuerkitoBio/goquery v1.7.1 // indirect

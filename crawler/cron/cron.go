@@ -2,11 +2,12 @@ package cron
 
 import (
 	"context"
-	"crawler/data"
-	"crawler/worker/publishers"
 	"encoding/json"
 	"log"
 	"time"
+
+	"github.com/Khaled-Abdelal/job-crawler/crawler/data"
+	"github.com/Khaled-Abdelal/job-crawler/crawler/worker/publishers"
 
 	"github.com/go-co-op/gocron"
 )

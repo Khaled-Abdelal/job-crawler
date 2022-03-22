@@ -2,13 +2,14 @@ package consumers
 
 import (
 	"context"
-	"crawler/crawlers"
-	"crawler/data"
-	"crawler/worker"
-	"crawler/worker/publishers"
 	"encoding/json"
 	"log"
 	"os"
+
+	"github.com/Khaled-Abdelal/job-crawler/crawler/crawlers"
+	"github.com/Khaled-Abdelal/job-crawler/crawler/data"
+	"github.com/Khaled-Abdelal/job-crawler/crawler/worker"
+	"github.com/Khaled-Abdelal/job-crawler/crawler/worker/publishers"
 )
 
 func SearchWordsConsume(ctx context.Context) {
