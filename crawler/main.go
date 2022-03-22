@@ -14,7 +14,6 @@ import (
 
 func main() {
 	loadEnvFile()
-	println("-----------------", os.Getenv("APP_ENV"))
 	ctx := context.Background()
 	ctx = worker.RabbitMQSetUp(ctx)
 	s := cron.RunSearchWordsCron(ctx)
