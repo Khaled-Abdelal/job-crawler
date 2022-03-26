@@ -7,7 +7,6 @@ require (
 	github.com/antchfx/htmlquery v1.2.4 // indirect
 	github.com/antchfx/xmlquery v1.3.10 // indirect
 	github.com/go-co-op/gocron v1.13.0
-	github.com/go-kit/kit v0.10.0 // indirect
 	github.com/gocolly/colly/v2 v2.1.0
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
