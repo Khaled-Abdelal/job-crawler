@@ -27,15 +27,27 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-  crawler:
-    build: ./crawler
-    depends_on:
-      postgres:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
-    env_file:
-      - ./crawler/.env.compose
+  elasticsearch:
+    image: "elasticsearch:8.1.1"
+    ports: 
+      - 9200:9200
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    # healthcheck:
+    #   test: curl -u elastic:elastic -s -f elasticsearch:9200/_cat/health >/dev/null || exit 1
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 5
+  # crawler:
+  #   build: ./crawler
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     rabbitmq:
+  #       condition: service_healthy
+  #   env_file:
+  #     - ./crawler/.env.compose
 
 
 
