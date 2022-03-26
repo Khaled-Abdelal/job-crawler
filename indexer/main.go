@@ -1,10 +1,10 @@
 package main
 
 import (
-	"context"
 	"log"
 	"os"
 
+	"github.com/Khaled-Abdelal/job-crawler/indexer/indexer"
 	"github.com/Khaled-Abdelal/job-crawler/indexer/worker"
 	"github.com/Khaled-Abdelal/job-crawler/indexer/worker/consumers"
 
@@ -13,9 +13,10 @@ import (
 
 func main() {
 	loadEnvFile()
-	ctx := context.Background()
-	ctx = worker.RabbitMQSetUp(ctx)
-	consumers.CrawledJobsConsumer(ctx)
+	esClient := indexer.NewElasticSearchClient()
+	rabbitMQSession := worker.RabbitMQSetUp() // holds the rabbitMQ Connection, channel
+	consumers.CrawledJobsConsumer(rabbitMQSession, esClient)
+
 }
 
 func loadEnvFile() {

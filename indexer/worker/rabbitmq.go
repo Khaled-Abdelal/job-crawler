@@ -1,35 +1,24 @@
 package worker
 
 import (
-	"context"
 	"os"
 
 	"github.com/isayme/go-amqp-reconnect/rabbitmq"
 )
 
-// create a unique identifier for the context key
-type key int
-
-const ampqSessionKeyID key = iota
-
 // ampqSession composes an rabbitmq.Connection with an rabbitmq.Channel
-type ampqSession struct {
+type AMPQSession struct {
 	*rabbitmq.Connection
 	*rabbitmq.Channel
 }
 
-func RabbitMQSetUp(ctx context.Context) context.Context {
+func RabbitMQSetUp() *AMPQSession {
 	connection := connect(os.Getenv("RABBIT_MQ_CONNECTION_STRING"))
 	channelRabbitMQ, err := connection.Channel()
 	if err != nil {
 		panic(err)
 	}
-	ctx = context.WithValue(ctx, ampqSessionKeyID, ampqSession{Connection: connection, Channel: channelRabbitMQ})
-	return ctx
-}
-
-func GetSessionFromContext(ctx context.Context) ampqSession {
-	return ctx.Value(ampqSessionKeyID).(ampqSession)
+	return &AMPQSession{Connection: connection, Channel: channelRabbitMQ}
 }
 
 func connect(url string) *rabbitmq.Connection {
