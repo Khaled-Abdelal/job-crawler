@@ -32,7 +32,7 @@ func SearchWordsConsume(ctx context.Context) {
 	forever := make(chan bool)
 	go func() {
 		for d := range messageChannel {
-			log.Printf("recived message on the channel %s", d.Body)
+			log.Printf("received message on the channel %s", d.Body)
 			keywordDB := &data.SearchWord{}
 			err := json.Unmarshal(d.Body, keywordDB)
 			if err != nil {
