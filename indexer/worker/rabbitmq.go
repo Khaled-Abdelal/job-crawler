@@ -16,7 +16,7 @@ func RabbitMQSetUp() *AMPQSession {
 	connection := connect(os.Getenv("RABBIT_MQ_CONNECTION_STRING"))
 	channelRabbitMQ, err := connection.Channel()
 	if err != nil {
-		panic(err)
+		panic("Can't connect to RabbitMQ")
 	}
 	return &AMPQSession{Connection: connection, Channel: channelRabbitMQ}
 }

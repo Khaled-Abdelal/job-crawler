@@ -8,6 +8,12 @@ replace github.com/Khaled-Abdelal/job-crawler/indexer/worker => ./worker
 
 replace github.com/Khaled-Abdelal/job-crawler/indexer/worker/consumers => ./worker/consumers
 
+replace github.com/Khaled-Abdelal/job-crawler/indexer/server => ./server
+
+replace github.com/Khaled-Abdelal/job-crawler/indexer/indexer => ./indexer
+
+replace github.com/Khaled-Abdelal/job-crawler/indexer/proto/jobservice => ./proto/jobservice
+
 require (
 	github.com/Khaled-Abdelal/job-crawler/crawler v0.0.0-20220322201201-a8d98c540e9e
 	github.com/PuerkitoBio/goquery v1.8.0 // indirect
@@ -21,5 +27,6 @@ require (
 	github.com/joho/godotenv v1.4.0
 	github.com/streadway/amqp v1.0.0 // indirect
 	golang.org/x/net v0.0.0-20220325170049-de3da57026de // indirect
-	google.golang.org/protobuf v1.28.0 // indirect
+	google.golang.org/grpc v1.32.0 // or newer
+	google.golang.org/protobuf v1.28.0
 )

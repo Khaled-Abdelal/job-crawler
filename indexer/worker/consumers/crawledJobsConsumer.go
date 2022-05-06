@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"log"
 	"os"
-	"strings"
 
+	"github.com/Khaled-Abdelal/job-crawler/indexer/indexer"
 	"github.com/Khaled-Abdelal/job-crawler/indexer/worker"
 	"github.com/elastic/go-elasticsearch/v8"
 
@@ -37,26 +37,10 @@ func CrawledJobsConsumer(rabbitMQSession *worker.AMPQSession, elasticSearchClien
 			if err != nil {
 				panic(err)
 			}
-			res, err := elasticSearchClient.Index(
-				"my-index",
-				strings.NewReader(string(d.Body)),
-			)
+			err = indexer.Index(elasticSearchClient, "my-index", string(d.Body))
 			if err != nil {
-				log.Fatalf("Error getting response: %s", err)
+				panic(err)
 			}
-			if res.IsError() {
-				log.Printf("[%s] Error indexing document ID=%s", res.Status(), job.Title)
-			} else {
-				// Deserialize the response into a map.
-				var r map[string]interface{}
-				if err := json.NewDecoder(res.Body).Decode(&r); err != nil {
-					log.Printf("Error parsing the response body: %s", err)
-				} else {
-					// Print the response status and indexed document version.
-					log.Printf("[%s] %s; version=%d", res.Status(), r["result"], int(r["_version"].(float64)))
-				}
-			}
-			res.Body.Close()
 		}
 	}()
 	<-forever

@@ -1,0 +1,27 @@
+syntax = "proto3";
+package job;
+option go_package = "./jobservice";
+
+service JobService {
+    rpc GetJobs(GetJobsRequest) returns (GetJobsResponse) {}
+}
+
+message GetJobsRequest {
+    string search_term = 1;
+    int32 from = 2;
+    int32 size = 3;
+  }
+
+  message GetJobsResponse {
+    repeated Job jobs = 1;
+    int32 total = 2;
+  }
+
+  message Job {
+    string Title = 1;
+    string URL = 2;
+    string Source = 3;
+    string Description = 4;
+    string Location = 5;
+    string CompanyName = 6;
+  }
