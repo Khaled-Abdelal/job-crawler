@@ -26,8 +26,8 @@ func main() {
 	flag.Parse()
 	loadEnvFile()
 	esClient := indexer.NewElasticSearchClient()
-	rabbitMQSession := worker.RabbitMQSetUp() // holds the rabbitMQ Connection, channel
-	go consumers.CrawledJobsConsumer(rabbitMQSession, esClient)
+	rabbitMQSession := worker.RabbitMQSetUp()                   // holds the rabbitMQ Connection, channel
+	go consumers.CrawledJobsConsumer(rabbitMQSession, esClient) // listen for new crawled jobs to be indexed
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)

@@ -35,11 +35,13 @@ func CrawledJobsConsumer(rabbitMQSession *worker.AMPQSession, elasticSearchClien
 			job := &crawlers.Job{}
 			err := json.Unmarshal(d.Body, job)
 			if err != nil {
-				panic(err)
+				log.Printf("error parsing crawled job: %s", err)
+				return
 			}
 			err = indexer.Index(elasticSearchClient, "my-index", string(d.Body))
 			if err != nil {
-				panic(err)
+				log.Printf("error parsing indexing crawled job: %s", err)
+				return
 			}
 		}
 	}()

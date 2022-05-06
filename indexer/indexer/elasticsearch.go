@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"strings"
 
@@ -35,24 +36,23 @@ func Index(client *elasticsearch.Client, index string, data string) error {
 		strings.NewReader(data),
 	)
 	if err != nil {
-		log.Printf("error getting response: %s", err)
+		log.Printf("error getting elasticsearch response: %s", err)
 		return err
 	}
+	defer res.Body.Close()
 	if res.IsError() {
 		log.Printf("[%s] Error indexing document ID=%s", res.Status(), data)
 		return errors.New("error indexing document")
-	} else {
-		// Deserialize the response into a map.
-		var r map[string]interface{}
-		if err := json.NewDecoder(res.Body).Decode(&r); err != nil {
-			log.Printf("Error parsing the response body: %s", err)
-			return err
-		} else {
-			// Print the response status and indexed document version.
-			log.Printf("[%s] %s; version=%d", res.Status(), r["result"], int(r["_version"].(float64)))
-		}
 	}
-	res.Body.Close()
+	// Deserialize the response into a map.
+	var r map[string]interface{}
+	if err := json.NewDecoder(res.Body).Decode(&r); err != nil {
+		log.Printf("Error parsing the response body: %s", err)
+		return err
+	}
+	// Print the response status and indexed document version.
+	log.Printf("[%s] %s; version=%d", res.Status(), r["result"], int(r["_version"].(float64)))
+
 	return nil
 }
 
@@ -60,7 +60,8 @@ func _search(client *elasticsearch.Client, index string, query map[string]interf
 	// parse the query
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(query); err != nil {
-		log.Fatalf("Error encoding query: %s", err)
+		log.Printf("Error encoding query: %s", err)
+		return nil, err
 	}
 	// Perform the search request.
 	res, err := client.Search(
@@ -73,26 +74,29 @@ func _search(client *elasticsearch.Client, index string, query map[string]interf
 		client.Search.WithPretty(),
 	)
 	if err != nil {
-		log.Fatalf("Error getting response: %s", err)
+		log.Printf("Error getting response: %s", err)
+		return nil, err
 	}
 	defer res.Body.Close()
 
 	if res.IsError() {
 		var e map[string]interface{}
 		if err := json.NewDecoder(res.Body).Decode(&e); err != nil {
-			log.Fatalf("Error parsing the response body: %s", err)
-		} else {
-			// Print the response status and error information.
-			log.Fatalf("[%s] %s: %s",
-				res.Status(),
-				e["error"].(map[string]interface{})["type"],
-				e["error"].(map[string]interface{})["reason"],
-			)
+			log.Printf("Error parsing the response body: %s", err)
+			return nil, err
 		}
+		// Print the response status and error information.
+		log.Printf("[%s] %s: %s",
+			res.Status(),
+			e["error"].(map[string]interface{})["type"],
+			e["error"].(map[string]interface{})["reason"],
+		)
+		return nil, fmt.Errorf("error searching elasticsearch with status: %s", res.Status())
 	}
 	var r map[string]interface{}
 	if err := json.NewDecoder(res.Body).Decode(&r); err != nil {
-		log.Fatalf("Error parsing the response body: %s", err)
+		log.Printf("Error parsing the response body: %s", err)
+		return nil, err
 	}
 	// Print the response status, number of results, and request duration.
 	log.Printf(
