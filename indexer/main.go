@@ -32,7 +32,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
-	// indexer.GetJobs(esClient, "iOS Developer (m/f/d )")
 	s := grpc.NewServer(
 		grpc.ChainUnaryInterceptor(ElasticSearchUnaryServerInterceptor(esClient)),
 	)

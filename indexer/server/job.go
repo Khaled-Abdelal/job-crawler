@@ -14,7 +14,7 @@ type server struct {
 	pb.UnimplementedJobServiceServer
 }
 
-func (s *server) Getjobs(ctx context.Context, in *pb.GetJobsRequest) (*pb.GetJobsResponse, error) {
+func (s *server) GetJobs(ctx context.Context, in *pb.GetJobsRequest) (*pb.GetJobsResponse, error) {
 	esClient := ctx.Value(indexer.ElasticSearchClientContextKey).(*elasticsearch.Client)
 	if esClient == nil {
 		return nil, status.Error(codes.Internal, "No ElasticSearch connection found")
@@ -38,6 +38,6 @@ func (s *server) Getjobs(ctx context.Context, in *pb.GetJobsRequest) (*pb.GetJob
 	return &serverRes, nil
 }
 
-func GetNewServer() server {
-	return server{}
+func GetNewServer() *server {
+	return &server{}
 }
