@@ -2,12 +2,13 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"html"
 	"log"
 	"net/http"
 	"strconv"
+
+	"google.golang.org/protobuf/encoding/protojson"
 
 	pb "github.com/Khaled-Abdelal/job-crawler/indexer/proto/jobservice"
 	"google.golang.org/grpc"
@@ -67,8 +68,8 @@ func jobsHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Fatalf("Error when calling GetJobs: %s", err)
 		}
-		r, _ := json.Marshal(response)
-		w.Write(r)
+		r, _ := protojson.Marshal(response)
+		w.Write([]byte(r))
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		fmt.Fprintf(w, "I can't do that.")
