@@ -14,7 +14,7 @@ type GetJobsResponse struct {
 }
 
 func GetJobs(client *elasticsearch.Client, term string, from int32, size int32) (GetJobsResponse, error) {
-	searchFields := [2]string{"Title^10", "Description"}
+	searchFields := [2]string{"title^10", "description"}
 	query := map[string]interface{}{
 		"query": map[string]interface{}{
 			"multi_match": map[string]interface{}{
