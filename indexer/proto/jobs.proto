@@ -18,10 +18,10 @@ message GetJobsRequest {
   }
 
   message Job {
-    string Title = 1 [json_name="title"];
-    string URL = 2 [json_name="URL"];
-    string Source = 3 [json_name="source"];
-    string Description = 4 [json_name="description"];
-    string Location = 5 [json_name="location"];
-    string CompanyName = 6 [json_name="companyName"];
+    string Title = 1;
+    string URL = 2;
+    string Source = 3;
+    string Description = 4;
+    string Location = 5;
+    string CompanyName = 6;
   }
