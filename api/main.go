@@ -25,6 +25,8 @@ func main() {
 }
 
 func jobsHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	switch r.Method {
 	case "GET":
 		searchTerm := r.URL.Query().Get("searchTerm")
