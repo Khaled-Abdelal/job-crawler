@@ -56,7 +56,7 @@ func Index(client *elasticsearch.Client, index string, data string) error {
 	return nil
 }
 
-func _search(client *elasticsearch.Client, index string, query map[string]interface{}, from int, size int) (map[string]interface{}, error) {
+func _search(client *elasticsearch.Client, index string, query map[string]interface{}, from int32, size int32) (map[string]interface{}, error) {
 	// parse the query
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(query); err != nil {
@@ -69,8 +69,8 @@ func _search(client *elasticsearch.Client, index string, query map[string]interf
 		client.Search.WithIndex(index),
 		client.Search.WithBody(&buf),
 		client.Search.WithTrackTotalHits(true),
-		client.Search.WithFrom(from),
-		client.Search.WithSize(size),
+		client.Search.WithFrom(int(from)),
+		client.Search.WithSize(int(size)),
 		client.Search.WithPretty(),
 	)
 	if err != nil {

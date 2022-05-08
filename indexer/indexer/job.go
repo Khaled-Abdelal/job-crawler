@@ -13,7 +13,7 @@ type GetJobsResponse struct {
 	Total int32
 }
 
-func GetJobs(client *elasticsearch.Client, term string, from int, size int) (GetJobsResponse, error) {
+func GetJobs(client *elasticsearch.Client, term string, from int32, size int32) (GetJobsResponse, error) {
 	query := map[string]interface{}{
 		"query": map[string]interface{}{
 			"match": map[string]interface{}{

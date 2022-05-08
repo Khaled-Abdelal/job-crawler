@@ -14,12 +14,12 @@ type server struct {
 	pb.UnimplementedJobServiceServer
 }
 
-func (s *server) GetJobs(ctx context.Context, in *pb.GetJobsRequest) (*pb.GetJobsResponse, error) {
+func (s *server) GetJobs(ctx context.Context, req *pb.GetJobsRequest) (*pb.GetJobsResponse, error) {
 	esClient := ctx.Value(indexer.ElasticSearchClientContextKey).(*elasticsearch.Client)
 	if esClient == nil {
 		return nil, status.Error(codes.Internal, "No ElasticSearch connection found")
 	}
-	searchRes, _ := indexer.GetJobs(esClient, "front end", 0, 10)
+	searchRes, _ := indexer.GetJobs(esClient, req.SearchTerm, req.From, req.Size)
 	var jobs []*pb.Job
 	for _, job := range searchRes.Jobs {
 		jobs = append(jobs, &pb.Job{
