@@ -6,6 +6,7 @@ export default function Search({ job }) {
             <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{job.title}</h5>
             <p className="font-bold text-gray-700 dark:text-gray-400">{job.companyName}</p>
             <p className="mb-2 font-bold text-gray-700 dark:text-gray-400">{job.source}</p>
+            <p className="mb-2 font-bold text-gray-700 dark:text-gray-400">{job.location}</p>
             <p className="font-normal text-gray-700 dark:text-gray-400">{job.description}</p>
         </a>
     )
