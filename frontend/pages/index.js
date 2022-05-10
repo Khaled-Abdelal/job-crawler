@@ -16,9 +16,13 @@ export default function Home() {
     .then(res => res.json())
   )
   const handleSearchInput = (input=searchTerm, page=0) => {
-    if(input.trim === "") return
+    console.log(input)
     setSearchTerm(input)
     setPage(page)
+    if(input.trim() === "") {
+      mutation.reset() 
+      return
+    }
     mutation.mutate({searchTerm:input, pageInput:page})
   }
   return (
