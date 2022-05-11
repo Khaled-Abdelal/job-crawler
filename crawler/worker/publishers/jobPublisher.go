@@ -1,7 +1,6 @@
 package publishers
 
 import (
-	"context"
 	"encoding/json"
 	"log"
 	"os"
@@ -12,8 +11,7 @@ import (
 	"github.com/streadway/amqp"
 )
 
-func PublishJobs(jobs []crawlers.Job, ctx context.Context) {
-	var ampqSession = worker.GetSessionFromContext(ctx)
+func PublishJobs(jobs []crawlers.Job, ampqSession worker.AMPQSession) {
 	channelRabbitMQ := ampqSession.Channel
 
 	for _, job := range jobs {

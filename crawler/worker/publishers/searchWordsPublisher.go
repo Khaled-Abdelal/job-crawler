@@ -1,7 +1,6 @@
 package publishers
 
 import (
-	"context"
 	"log"
 	"os"
 
@@ -10,8 +9,7 @@ import (
 	"github.com/streadway/amqp"
 )
 
-func PublishSearchWord(body []byte, ctx context.Context) {
-	var ampqSession = worker.GetSessionFromContext(ctx)
+func PublishSearchWord(body []byte, ampqSession worker.AMPQSession) {
 	channelRabbitMQ := ampqSession.Channel
 	err := channelRabbitMQ.Publish("", os.Getenv("SEARCH_WORD_TO_CRAWL_QUEUE"), false, false, amqp.Publishing{
 		DeliveryMode: amqp.Persistent,

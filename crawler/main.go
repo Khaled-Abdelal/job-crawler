@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"log"
 	"os"
 
@@ -14,11 +13,10 @@ import (
 
 func main() {
 	loadEnvFile()
-	ctx := context.Background()
-	ctx = worker.RabbitMQSetUp(ctx)
-	s := cron.RunSearchWordsCron(ctx)
+	ampqSession := worker.RabbitMQSetUp() // holds the rabbitMQ session accross the app
+	s := cron.RunSearchWordsCron(ampqSession)
 	go s.StartBlocking()
-	consumers.SearchWordsConsume(ctx)
+	consumers.SearchWordsConsume(ampqSession)
 }
 
 func loadEnvFile() {

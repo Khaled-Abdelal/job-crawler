@@ -1,7 +1,6 @@
 package consumers
 
 import (
-	"context"
 	"encoding/json"
 	"log"
 	"os"
@@ -12,8 +11,7 @@ import (
 	"github.com/Khaled-Abdelal/job-crawler/crawler/worker/publishers"
 )
 
-func SearchWordsConsume(ctx context.Context) {
-	var ampqSession = worker.GetSessionFromContext(ctx)
+func SearchWordsConsume(ampqSession worker.AMPQSession) {
 	channelRabbitMQ := ampqSession.Channel
 
 	messageChannel, err := channelRabbitMQ.Consume(
@@ -47,7 +45,7 @@ func SearchWordsConsume(ctx context.Context) {
 				}
 				jobsCrawled = append(jobsCrawled, js...)
 			}
-			publishers.PublishJobs(jobsCrawled, ctx)
+			publishers.PublishJobs(jobsCrawled, ampqSession)
 		}
 	}()
 	<-forever
