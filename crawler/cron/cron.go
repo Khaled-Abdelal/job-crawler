@@ -14,7 +14,7 @@ import (
 func RunSearchWordsCron(ampqSession worker.AMPQSession) gocron.Scheduler {
 	s := gocron.NewScheduler(time.UTC)
 	fn := func() { task(ampqSession) }
-	s.Every(5).Seconds().Do(fn)
+	s.Every(50).Seconds().Do(fn)
 	return *s
 }
 
