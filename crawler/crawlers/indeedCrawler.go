@@ -13,8 +13,7 @@ func NewIndeedCrawler() indeedCrawler {
 	return indeedCrawler{}
 }
 
-func (indeedCrawler) Crawl(jobTitle string) ([]Job, error) {
-	var js []Job
+func (indeedCrawler) Crawl(jobTitle string, ch chan Job) {
 	cc := colly.NewCollector()
 	cc.OnResponse(func(r *colly.Response) {
 		log.Println("Done Visiting: ", r.StatusCode)
@@ -23,17 +22,16 @@ func (indeedCrawler) Crawl(jobTitle string) ([]Job, error) {
 		log.Println("Visiting: ", r.URL.String())
 	})
 	cc.OnHTML("a[id^=job_]", func(e *colly.HTMLElement) {
-		temp := Job{}
-		temp.Title = e.ChildText("h2")
-		temp.URL = "https://www.indeed.com" + e.Attr("href")
-		temp.Source = "Indeed"
-		temp.Description = e.ChildText("li")
-		temp.Location = e.ChildText(".companyLocation")
-		temp.CompanyName = e.ChildText(".companyName")
-		js = append(js, temp)
+		job := Job{}
+		job.Title = e.ChildText("h2")
+		job.URL = "https://www.indeed.com" + e.Attr("href")
+		job.Source = "Indeed"
+		job.Description = e.ChildText("li")
+		job.Location = e.ChildText(".companyLocation")
+		job.CompanyName = e.ChildText(".companyName")
+		ch <- job
 	})
 	searchURL := fmt.Sprintf("https://www.indeed.com/q-%s-jobs.html", jobTitle)
 	cc.Visit(searchURL)
 	cc.Wait()
-	return js, nil
 }

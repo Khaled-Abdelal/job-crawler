@@ -11,10 +11,9 @@ import (
 	"github.com/streadway/amqp"
 )
 
-func PublishJobs(jobs []crawlers.Job, ampqSession worker.AMPQSession) {
+func PublishJobs(ch chan crawlers.Job, ampqSession worker.AMPQSession) {
 	channelRabbitMQ := ampqSession.Channel
-
-	for _, job := range jobs {
+	for job := range ch {
 		body, err := json.Marshal(job)
 		if err != nil {
 			log.Println(err, "Error encoding JSON")

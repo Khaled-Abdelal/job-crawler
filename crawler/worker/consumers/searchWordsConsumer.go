@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+	"sync"
 
 	"github.com/Khaled-Abdelal/job-crawler/crawler/crawlers"
 	"github.com/Khaled-Abdelal/job-crawler/crawler/data"
@@ -24,7 +25,7 @@ func SearchWordsConsume(ampqSession worker.AMPQSession) {
 		nil,
 	)
 	if err != nil {
-		panic(err)
+		log.Print(err)
 	}
 
 	forever := make(chan bool)
@@ -34,18 +35,21 @@ func SearchWordsConsume(ampqSession worker.AMPQSession) {
 			keywordDB := &data.SearchWord{}
 			err := json.Unmarshal(d.Body, keywordDB)
 			if err != nil {
-				panic(err)
+				log.Print(err)
 			}
 			activeCrawlers := crawlers.GetActiveCrawlers()
-			jobsCrawled := []crawlers.Job{}
+			ch := make(chan crawlers.Job, len(activeCrawlers)*100) // assume a buffer of 100 job per crawler
+			var wg sync.WaitGroup
 			for _, c := range activeCrawlers {
-				js, err := c.Crawl(keywordDB.SearchWord)
-				if err != nil {
-					log.Printf("error crawling jobs for crawler %s", c)
-				}
-				jobsCrawled = append(jobsCrawled, js...)
+				wg.Add(1)
+				go func(c crawlers.Crawler, ch chan crawlers.Job, wg *sync.WaitGroup) {
+					c.Crawl(keywordDB.SearchWord, ch)
+					wg.Done()
+				}(c, ch, &wg)
 			}
-			publishers.PublishJobs(jobsCrawled, ampqSession)
+			wg.Wait()
+			close(ch)                               // close the channel after all the sites has been crawled
+			publishers.PublishJobs(ch, ampqSession) // pass channel with all received jobs to be published for indexing
 		}
 	}()
 	<-forever
