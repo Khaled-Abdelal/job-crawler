@@ -21,7 +21,7 @@ func (indeedCrawler) Crawl(jobTitle string, ch chan Job) {
 	cc.OnRequest(func(r *colly.Request) {
 		log.Println("Visiting: ", r.URL.String())
 	})
-	cc.OnHTML("a[id^=job_]", func(e *colly.HTMLElement) {
+	cc.OnHTML("li div[class^=job_]", func(e *colly.HTMLElement) {
 		job := Job{}
 		job.Title = e.ChildText("h2")
 		job.URL = "https://www.indeed.com" + e.Attr("href")
