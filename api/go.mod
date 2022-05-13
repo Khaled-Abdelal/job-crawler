@@ -15,3 +15,5 @@ require (
 )
 
 replace github.com/Khaled-Abdelal/job-crawler/indexer v0.0.0-local => ../indexer
+
+replace github.com/Khaled-Abdelal/job-crawler/crawler v0.0.0-local => ../crawler
