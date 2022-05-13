@@ -1,11 +1,13 @@
 package indexer
 
 import (
+	"bytes"
 	"encoding/json"
 	"log"
 
 	"github.com/Khaled-Abdelal/job-crawler/crawler/crawlers"
 	"github.com/elastic/go-elasticsearch/v8"
+	"github.com/elastic/go-elasticsearch/v8/esapi"
 )
 
 type GetJobsResponse struct {
@@ -47,4 +49,19 @@ func GetJobs(client *elasticsearch.Client, term string, from int32, size int32) 
 		Total: total,
 	}
 	return response, err
+}
+
+func IndexJobs(client *elasticsearch.Client, job crawlers.Job) error {
+	jobBytes, err := json.Marshal(job)
+	if err != nil {
+		log.Printf("error parsing crawled job: %s", err)
+		return err
+	}
+	req := esapi.IndexRequest{
+		Index:      "my-index",
+		DocumentID: job.ID,
+		Body:       bytes.NewReader(jobBytes),
+		Refresh:    "true",
+	}
+	return _index(client, req)
 }

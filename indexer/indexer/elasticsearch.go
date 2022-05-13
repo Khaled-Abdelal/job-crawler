@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/elastic/go-elasticsearch/v8"
+	"github.com/elastic/go-elasticsearch/v8/esapi"
 )
 
 type contextKey string
@@ -30,18 +31,15 @@ func NewElasticSearchClient() *elasticsearch.Client {
 	return es
 }
 
-func Index(client *elasticsearch.Client, index string, data string) error {
-	res, err := client.Index(
-		index,
-		strings.NewReader(data),
-	)
+func _index(client *elasticsearch.Client, req esapi.IndexRequest) error {
+	res, err := req.Do(context.Background(), client)
 	if err != nil {
 		log.Printf("error getting elasticsearch response: %s", err)
 		return err
 	}
 	defer res.Body.Close()
 	if res.IsError() {
-		log.Printf("[%s] Error indexing document ID=%s", res.Status(), data)
+		log.Printf("[%s] Error indexing document ID=%s", res.Status(), req.DocumentID)
 		return errors.New("error indexing document")
 	}
 	// Deserialize the response into a map.
