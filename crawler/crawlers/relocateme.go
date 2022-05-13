@@ -37,7 +37,6 @@ func (relocateMeCrawler) Crawl(jobTitle string, ch chan Job) {
 		job.Description = e.ChildText("p.job__preview")
 		job.Location = strings.ReplaceAll(e.ChildText("div.job__title"), job.Title, "")
 		job.CompanyName = e.ChildText("div.job__company")
-		log.Print(job)
 		ch <- job
 	})
 	for i := 0; i < 5; i++ { // scrap 5 pages

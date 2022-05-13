@@ -36,7 +36,6 @@ func (indeedCrawler) Crawl(jobTitle string, ch chan Job) {
 		job.Description = e.ChildText("li")
 		job.Location = e.ChildText(".companyLocation")
 		job.CompanyName = e.ChildText(".companyName")
-		log.Print(job)
 		ch <- job
 	})
 	for i := 0; i < 5; i++ { // scrap 5 pages
