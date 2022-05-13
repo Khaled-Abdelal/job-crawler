@@ -38,6 +38,10 @@ func (indeedCrawler) Crawl(jobTitle string) ([]Job, error) {
 		job.Description = e.ChildText("li")
 		job.Location = e.ChildText(".companyLocation")
 		job.CompanyName = e.ChildText(".companyName")
+		if !job.validate() {
+			log.Print("Error: got invalid job from indeed crawler for keyword %", jobTitle)
+			return
+		}
 		jobs = append(jobs, job)
 	})
 	for i := 0; i < 5; i++ { // scrap 5 pages

@@ -14,6 +14,13 @@ type Job struct {
 	CompanyName string `json:"companyName"`
 }
 
+func (job *Job) validate() bool {
+	if len(job.Title) == 0 || len(job.Description) == 0 || len(job.ID) == 0 {
+		return false
+	}
+	return true
+}
+
 func GetActiveCrawlers() []Crawler {
 	result := []Crawler{
 		NewIndeedCrawler(),

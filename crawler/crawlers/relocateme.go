@@ -39,6 +39,10 @@ func (relocateMeCrawler) Crawl(jobTitle string) ([]Job, error) {
 		job.Description = e.ChildText("p.job__preview")
 		job.Location = strings.ReplaceAll(e.ChildText("div.job__title"), job.Title, "")
 		job.CompanyName = e.ChildText("div.job__company")
+		if !job.validate() {
+			log.Print("Error: got invalid job from relocate me crawler for keyword %", jobTitle)
+			return
+		}
 		jobs = append(jobs, job)
 	})
 	for i := 0; i < 5; i++ { // scrap 5 pages
