@@ -30,6 +30,7 @@ func (indeedCrawler) Crawl(jobTitle string, ch chan Job) {
 	})
 	cc.OnHTML("li div[class^=job_]", func(e *colly.HTMLElement) {
 		job := Job{}
+		job.ID = e.ChildAttr("a[id^=job_]", "id")
 		job.Title = e.ChildText("h2")
 		job.URL = "https://www.indeed.com" + e.ChildAttr("a[id^=job_]", "href")
 		job.Source = "Indeed"

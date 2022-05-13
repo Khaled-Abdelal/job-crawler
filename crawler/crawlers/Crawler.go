@@ -5,6 +5,7 @@ type Crawler interface {
 }
 
 type Job struct {
+	ID          string `json:"id"`
 	Title       string `json:"title"`
 	URL         string `json:"URL"`
 	Source      string `json:"source"`
@@ -16,7 +17,7 @@ type Job struct {
 func GetActiveCrawlers() []Crawler {
 	result := []Crawler{
 		NewIndeedCrawler(),
-		NewrelocateMeCrawler(),
+		NewRelocateMeCrawler(),
 	}
 	return result
 }

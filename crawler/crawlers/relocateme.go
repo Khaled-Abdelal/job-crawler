@@ -12,7 +12,7 @@ import (
 
 type relocateMeCrawler struct{}
 
-func NewrelocateMeCrawler() relocateMeCrawler {
+func NewRelocateMeCrawler() relocateMeCrawler {
 	return relocateMeCrawler{}
 }
 
@@ -31,6 +31,7 @@ func (relocateMeCrawler) Crawl(jobTitle string, ch chan Job) {
 	})
 	cc.OnHTML("div.jobs-list__job", func(e *colly.HTMLElement) {
 		job := Job{}
+		job.ID = strings.ReplaceAll(e.ChildAttr("div.job__title a", "href"), "/", "") // job id replace / to jot cause url parsing issues
 		job.Title = e.ChildText("div.job__title b")
 		job.URL = "https://relocate.me" + e.ChildAttr("div.job__title a", "href")
 		job.Source = "Relocate.me"
