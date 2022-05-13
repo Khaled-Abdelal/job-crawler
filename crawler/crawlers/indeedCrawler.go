@@ -20,7 +20,7 @@ func (indeedCrawler) Crawl(jobTitle string, ch chan Job) {
 	cc.Limit(&colly.LimitRule{
 		DomainGlob:  "*indeed.*",
 		Parallelism: 1,
-		RandomDelay: 5 * time.Second,
+		RandomDelay: 3 * time.Second,
 	})
 	cc.OnResponse(func(r *colly.Response) {
 		log.Println("Done Visiting: ", r.StatusCode)
