@@ -38,18 +38,24 @@ func SearchWordsConsume(ampqSession worker.AMPQSession) {
 				log.Print(err)
 			}
 			activeCrawlers := crawlers.GetActiveCrawlers()
-			ch := make(chan crawlers.Job, len(activeCrawlers)*100) // assume a buffer of 100 job per crawler
 			var wg sync.WaitGroup
 			for _, c := range activeCrawlers {
 				wg.Add(1)
-				go func(c crawlers.Crawler, ch chan crawlers.Job, wg *sync.WaitGroup) {
-					c.Crawl(keywordDB.SearchWord, ch)
+				go func(c crawlers.Crawler, wg *sync.WaitGroup) {
+					jobs, err := c.Crawl(keywordDB.SearchWord)
+					if err != nil {
+						log.Printf("Error crawler jobs for keyword: %s", keywordDB.SearchWord)
+						return
+					}
+					err = publishers.PublishJobs(jobs, ampqSession) // pass jobs to be published for indexing
+					if err != nil {
+						log.Printf("Error Publishing jobs for keyword: %s", keywordDB.SearchWord)
+						return
+					}
 					wg.Done()
-				}(c, ch, &wg)
+				}(c, &wg)
 			}
 			wg.Wait()
-			close(ch)                               // close the channel after all the sites has been crawled
-			publishers.PublishJobs(ch, ampqSession) // pass channel with all received jobs to be published for indexing
 		}
 	}()
 	<-forever

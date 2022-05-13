@@ -1,7 +1,7 @@
 package crawlers
 
 type Crawler interface {
-	Crawl(jobTitle string, ch chan Job)
+	Crawl(jobTitle string) ([]Job, error)
 }
 
 type Job struct {
