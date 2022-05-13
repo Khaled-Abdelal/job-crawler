@@ -14,8 +14,9 @@ type Job struct {
 }
 
 func GetActiveCrawlers() []Crawler {
-	result := []Crawler{}
-	result = append(result, NewIndeedCrawler())
-
+	result := []Crawler{
+		NewIndeedCrawler(),
+		NewrelocateMeCrawler(),
+	}
 	return result
 }
