@@ -3,9 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
-	"html"
 	"log"
 	"net/http"
+	"net/http/httputil"
+	"net/url"
 	"strconv"
 
 	"google.golang.org/protobuf/encoding/protojson"
@@ -16,17 +17,15 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
-	})
+	http.HandleFunc("/", serveFrontendHandler)
 
-	http.HandleFunc("/api/jobs", jobsHandler)
+	http.HandleFunc("/api/jobs", searchJobsHandler)
 
 	log.Printf("server listening at %d", 8081)
 	log.Fatal(http.ListenAndServe(":8081", nil))
 }
 
-func jobsHandler(w http.ResponseWriter, r *http.Request) {
+func searchJobsHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	switch r.Method {
@@ -82,4 +81,31 @@ func jobsHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		fmt.Fprintf(w, "I can't do that.")
 	}
+}
+
+func serveFrontendHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	switch r.Method {
+	case "GET":
+		proxy, err := NewProxy("http://localhost:3000/")
+		if err != nil {
+			log.Println("Error parsing frontend url", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		proxy.ServeHTTP(w, r)
+	default:
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		fmt.Fprintf(w, "I can't do that.")
+	}
+}
+
+func NewProxy(targetHost string) (*httputil.ReverseProxy, error) {
+	url, err := url.Parse(targetHost)
+	if err != nil {
+		return nil, err
+	}
+
+	return httputil.NewSingleHostReverseProxy(url), nil
 }
