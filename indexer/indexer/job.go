@@ -27,19 +27,22 @@ func GetJobs(client *elasticsearch.Client, term string, from int32, size int32) 
 	}
 	res, err := _search(client, "my-index", query, from, size)
 	if err != nil {
-		log.Fatalf("Elastic search error: %s", err)
+		log.Printf("Elastic search error: %s", err)
+		return GetJobsResponse{}, nil
 	}
 	var jobs []crawlers.Job
 	for _, hit := range res["hits"].(map[string]interface{})["hits"].([]interface{}) {
 		log.Printf(" * ID=%s, %s", hit.(map[string]interface{})["_id"], hit.(map[string]interface{})["_source"])
 		jobJson, err := json.Marshal(hit.(map[string]interface{})["_source"])
 		if err != nil {
-			log.Fatalf("Error parsing ElasticSearch result to json: %s", err)
+			log.Printf("Error parsing ElasticSearch result to json: %s", err)
+			return GetJobsResponse{}, nil
 		}
 		var job crawlers.Job
 		err = json.Unmarshal([]byte(jobJson), &job)
 		if err != nil {
-			log.Fatalf("Error parsing Searched Jobs: %s", err)
+			log.Printf("Error parsing Searched Jobs: %s", err)
+			return GetJobsResponse{}, nil
 		}
 		jobs = append(jobs, job)
 	}
