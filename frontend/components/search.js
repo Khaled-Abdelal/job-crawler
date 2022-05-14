@@ -4,7 +4,7 @@ export default function Search({ handleSearchInput }) {
     return (
         <div className="flex justify-center">
             <div className="mb-3 xl:w-96">
-                <label for="exampleSearch2" className="form-label inline-block mb-2 text-gray-700">Search</label>
+                <label className="form-label inline-block mb-2 text-gray-700">Search</label>
                 <input
                     onKeyUp={(e) => handleSearchInput(e.target.value)}
                     type="search"
