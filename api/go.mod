@@ -6,6 +6,7 @@ replace github.com/Khaled-Abdelal/job-crawler/indexer/proto/jobservice => ./../i
 
 require (
 	github.com/Khaled-Abdelal/job-crawler/indexer v0.0.0-local
+	github.com/darahayes/go-boom v0.0.0-20200826120415-fa5cb724143a
 	// github.com/Khaled-Abdelal/job-crawler/indexer v0.0.0-20220508053131-be2d74ee34f6
 	golang.org/x/net v0.0.0-20220425223048-2871e0cb64e4 // indirect
 	golang.org/x/sys v0.0.0-20220503163025-988cb79eb6c6 // indirect

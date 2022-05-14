@@ -11,6 +11,7 @@ import (
 	"google.golang.org/protobuf/encoding/protojson"
 
 	pb "github.com/Khaled-Abdelal/job-crawler/indexer/proto/jobservice"
+	"github.com/darahayes/go-boom"
 	"google.golang.org/grpc"
 )
 
@@ -32,8 +33,7 @@ func jobsHandler(w http.ResponseWriter, r *http.Request) {
 	case "GET":
 		searchTerm := r.URL.Query().Get("searchTerm")
 		if searchTerm == "" {
-			log.Print("search term missing")
-			http.Error(w, "searchTerm is required", http.StatusBadRequest)
+			boom.BadRequest(w, "searchTerm is required")
 			return
 		}
 
@@ -42,18 +42,26 @@ func jobsHandler(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Query().Get("size") != "" {
 			strSize, err := strconv.Atoi(r.URL.Query().Get("size"))
 			if err != nil {
-				http.Error(w, "size must be valid int", http.StatusBadRequest)
+				boom.BadRequest(w, "size must be valid int")
 				return
 			}
 			size = int32(strSize)
+			if size < 0 {
+				boom.BadRequest(w, "size must be positive")
+				return
+			}
 		}
 		if r.URL.Query().Get("from") != "" {
 			strFrom, err := strconv.Atoi(r.URL.Query().Get("from"))
 			if err != nil {
-				http.Error(w, "from must be valid int", http.StatusBadRequest)
+				boom.BadRequest(w, "from must be valid int")
 				return
 			}
 			from = int32(strFrom)
+			if from < 0 {
+				boom.BadRequest(w, "from must be positive")
+				return
+			}
 		}
 		var conn *grpc.ClientConn
 		conn, err := grpc.Dial(":50051", grpc.WithInsecure())
