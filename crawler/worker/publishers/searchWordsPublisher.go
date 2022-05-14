@@ -1,23 +1,32 @@
 package publishers
 
 import (
+	"encoding/json"
 	"log"
 	"os"
 
+	"github.com/Khaled-Abdelal/job-crawler/crawler/data"
 	"github.com/Khaled-Abdelal/job-crawler/crawler/worker"
 
 	"github.com/streadway/amqp"
 )
 
-func PublishSearchWord(body []byte, ampqSession worker.AMPQSession) {
+func PublishSearchWord(sw data.SearchWord, ampqSession worker.AMPQSession) error {
+	body, err := json.Marshal(sw)
+	if err != nil {
+		log.Println(err, "Error encoding key word JSON")
+		return err
+	}
 	channelRabbitMQ := ampqSession.Channel
-	err := channelRabbitMQ.Publish("", os.Getenv("SEARCH_WORD_TO_CRAWL_QUEUE"), false, false, amqp.Publishing{
+	err = channelRabbitMQ.Publish("", os.Getenv("SEARCH_WORD_TO_CRAWL_QUEUE"), false, false, amqp.Publishing{
 		DeliveryMode: amqp.Persistent,
 		ContentType:  "text/plain",
 		Body:         body,
 	})
 	if err != nil {
-		log.Printf("Error publishing message: %s", err)
+		log.Printf("Error publishing keyword: %s", err)
+		return err
 	}
-	log.Println("Sending a message to the channel")
+	log.Printf("Sending keyword %s to the queue", sw.SearchWord)
+	return nil
 }

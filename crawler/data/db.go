@@ -12,8 +12,8 @@ type SearchWord struct {
 	ID         uint `gorm:"primaryKey"`
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
-	DeletedAt  gorm.DeletedAt `gorm:"index"`
-	SearchWord string
+	DeletedAt  gorm.DeletedAt
+	SearchWord string `gorm:"uniqueIndex"`
 }
 
 func GetDBConnection() (*gorm.DB, error) {

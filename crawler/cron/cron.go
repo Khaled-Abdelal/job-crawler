@@ -1,7 +1,6 @@
 package cron
 
 import (
-	"encoding/json"
 	"log"
 	"time"
 
@@ -9,28 +8,21 @@ import (
 	"github.com/Khaled-Abdelal/job-crawler/crawler/worker"
 	"github.com/Khaled-Abdelal/job-crawler/crawler/worker/publishers"
 	"github.com/go-co-op/gocron"
+	"gorm.io/gorm"
 )
 
-func RunSearchWordsCron(ampqSession worker.AMPQSession) gocron.Scheduler {
+func RunSearchWordsCron(ampqSession worker.AMPQSession, db *gorm.DB) gocron.Scheduler {
 	s := gocron.NewScheduler(time.UTC)
-	fn := func() { task(ampqSession) }
-	s.Every(50).Seconds().Do(fn)
+	fn := func() { task(ampqSession, db) }
+	s.Every(3000).Seconds().Do(fn)
 	return *s
 }
 
-func task(ampqSession worker.AMPQSession) {
+func task(ampqSession worker.AMPQSession, db *gorm.DB) {
 	log.Println("cron job activated")
-	now := time.Now()
-	sixHoursAgo := now.Add(time.Duration(-6) * time.Hour)
-	db, _ := data.GetDBConnection()
 	var sws []data.SearchWord
-	db.Find(&sws, "updated_at < ?", sixHoursAgo)
-	if len(sws) > 0 {
-		firstSw := sws[0]
-		body, err := json.Marshal(firstSw)
-		if err != nil {
-			log.Println(err, "Error encoding JSON")
-		}
-		publishers.PublishSearchWord(body, ampqSession)
+	db.Find(&sws)
+	for _, sw := range sws {
+		go publishers.PublishSearchWord(sw, ampqSession)
 	}
 }

@@ -39,7 +39,7 @@ func (indeedCrawler) Crawl(jobTitle string) ([]Job, error) {
 		job.Location = e.ChildText(".companyLocation")
 		job.CompanyName = e.ChildText(".companyName")
 		if !job.validate() {
-			log.Print("Error: got invalid job from indeed crawler for keyword %", jobTitle)
+			log.Print("Error: invalid job from indeed crawler for keyword %", jobTitle)
 			return
 		}
 		jobs = append(jobs, job)
