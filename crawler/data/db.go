@@ -20,6 +20,5 @@ func GetDBConnection() (*gorm.DB, error) {
 	dbConnectionString := os.Getenv("DATABASE_URL")
 	db, err := gorm.Open(postgres.Open(dbConnectionString), &gorm.Config{})
 	db.AutoMigrate(&SearchWord{})
-	db.Create(&SearchWord{SearchWord: "f developer"})
 	return db, err
 }
