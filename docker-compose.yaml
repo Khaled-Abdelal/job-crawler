@@ -34,21 +34,46 @@ services:
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
-    # healthcheck:
-    #   test: curl -u elastic:elastic -s -f elasticsearch:9200/_cat/health >/dev/null || exit 1
-    #   interval: 30s
-    #   timeout: 10s
-    #   retries: 5
-  # crawler:
-  #   build: ./crawler
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
-  #     rabbitmq:
-  #       condition: service_healthy
-  #   env_file:
-  #     - ./crawler/.env.compose
+    healthcheck:
+      test: curl -u elastic:elastic -s -f elasticsearch:9200/_cat/health >/dev/null || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 5
+  crawler:
+    build: ./crawler
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    env_file:
+      - ./crawler/.env.compose
 
+  indexer:
+    build: ./indexer
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    ports: 
+      - 50051:50051
+    env_file:
+      - ./indexer/.env.compose
+  api:
+    build: ./api
+    depends_on:
+      indexer:
+        condition: service_started
+    ports: 
+      - 8081:8081
+    env_file:
+      - ./api/.env.compose
+    
+  frontend:
+    build: ./frontend
+    env_file:
+      - ./frontend/.env.compose
 
 
 volumes: 

@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import TablePagination from '@mui/material/TablePagination';
 
 const APIRequest = async ({ searchTerm, pageInput, jobsPerPage }) => {
-  const res = await fetch(`http://localhost:8081/api/jobs?searchTerm=${searchTerm}&size=${jobsPerPage}&from=${pageInput * jobsPerPage}`)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs?searchTerm=${searchTerm}&size=${jobsPerPage}&from=${pageInput * jobsPerPage}`)
   const resJson = await res.json()
   if (!res.ok) throw resJson
   return resJson

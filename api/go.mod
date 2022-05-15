@@ -2,10 +2,11 @@ module github.com/Khaled-Abdelal/job-crawler/api
 
 go 1.16
 
-replace github.com/Khaled-Abdelal/job-crawler/indexer/proto/jobservice => ./../indexer/proto/jobservice
+//replace github.com/Khaled-Abdelal/job-crawler/indexer/proto/jobservice => ./../indexer/proto/jobservice
 
 require (
-	github.com/Khaled-Abdelal/job-crawler/indexer v0.0.0-local
+	github.com/Khaled-Abdelal/job-crawler/indexer v0.0.0-20220515052107-3e7abc0488e0 // indirect
+	//github.com/Khaled-Abdelal/job-crawler/indexer v0.0.0-local
 	github.com/darahayes/go-boom v0.0.0-20200826120415-fa5cb724143a
 	github.com/joho/godotenv v1.4.0
 	// github.com/Khaled-Abdelal/job-crawler/indexer v0.0.0-20220508053131-be2d74ee34f6
@@ -16,6 +17,6 @@ require (
 	google.golang.org/protobuf v1.28.0
 )
 
-replace github.com/Khaled-Abdelal/job-crawler/indexer v0.0.0-local => ../indexer
+//replace github.com/Khaled-Abdelal/job-crawler/indexer v0.0.0-local => ../indexer
 
-replace github.com/Khaled-Abdelal/job-crawler/crawler v0.0.0-local => ../crawler
+//replace github.com/Khaled-Abdelal/job-crawler/crawler v0.0.0-local => ../crawler
