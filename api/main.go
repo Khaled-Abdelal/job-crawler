@@ -7,22 +7,27 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"os"
 	"strconv"
 
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/protobuf/encoding/protojson"
 
 	pb "github.com/Khaled-Abdelal/job-crawler/indexer/proto/jobservice"
 	"github.com/darahayes/go-boom"
+	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
 )
 
 func main() {
+	loadEnvFile()
 	http.HandleFunc("/", serveFrontendHandler)
 
 	http.HandleFunc("/api/jobs", searchJobsHandler)
 
-	log.Printf("server listening at %d", 8081)
-	log.Fatal(http.ListenAndServe(":8081", nil))
+	port := os.Getenv("SERVER_PORT")
+	log.Printf("server listening at %s", port)
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), nil))
 }
 
 func searchJobsHandler(w http.ResponseWriter, r *http.Request) {
@@ -63,9 +68,11 @@ func searchJobsHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		var conn *grpc.ClientConn
-		conn, err := grpc.Dial(":50051", grpc.WithInsecure())
+		conn, err := grpc.Dial(os.Getenv("INDEXER_URL"), grpc.WithTransportCredentials(insecure.NewCredentials()))
 		if err != nil {
-			log.Fatalf("did not connect: %s", err)
+			log.Printf("Error did not connect: %s", err)
+			boom.Internal(w, "Error: internal server error")
+			return
 		}
 		defer conn.Close()
 
@@ -73,7 +80,9 @@ func searchJobsHandler(w http.ResponseWriter, r *http.Request) {
 
 		response, err := j.GetJobs(context.Background(), &pb.GetJobsRequest{SearchTerm: searchTerm, From: from, Size: size})
 		if err != nil {
-			log.Fatalf("Error when calling GetJobs: %s", err)
+			log.Printf("Error when calling GetJobs: %s", err)
+			boom.Internal(w, "Error: internal server error")
+			return
 		}
 		r, _ := protojson.Marshal(response)
 		w.Write([]byte(r))
@@ -88,7 +97,7 @@ func serveFrontendHandler(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 	case "GET":
-		proxy, err := NewProxy("http://localhost:3000/")
+		proxy, err := NewProxy(os.Getenv("FRONTEND_URL"))
 		if err != nil {
 			log.Println("Error parsing frontend url", err)
 			w.WriteHeader(http.StatusInternalServerError)
@@ -108,4 +117,18 @@ func NewProxy(targetHost string) (*httputil.ReverseProxy, error) {
 	}
 
 	return httputil.NewSingleHostReverseProxy(url), nil
+}
+
+func loadEnvFile() {
+	env := os.Getenv("APP_ENV")
+	if env == "production" {
+		return
+	}
+	if env == "" {
+		env = "development"
+	}
+	err := godotenv.Load(".env." + env)
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 }
