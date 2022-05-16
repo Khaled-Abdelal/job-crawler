@@ -42,13 +42,19 @@ services:
   crawler:
     build: ./crawler
     depends_on:
+      rabbitmq:
+        condition: service_healthy
+    env_file:
+      - ./crawler/.env.compose
+  keywords:
+    build: ./keywords
+    depends_on:
       postgres:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
     env_file:
-      - ./crawler/.env.compose
-
+      - ./keywords/.env.compose
   indexer:
     build: ./indexer
     depends_on:

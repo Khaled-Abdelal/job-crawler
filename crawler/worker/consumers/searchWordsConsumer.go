@@ -7,9 +7,9 @@ import (
 	"sync"
 
 	"github.com/Khaled-Abdelal/job-crawler/crawler/crawlers"
-	"github.com/Khaled-Abdelal/job-crawler/crawler/data"
 	"github.com/Khaled-Abdelal/job-crawler/crawler/worker"
 	"github.com/Khaled-Abdelal/job-crawler/crawler/worker/publishers"
+	"github.com/Khaled-Abdelal/job-crawler/keywords/data"
 )
 
 func SearchWordsConsume(ampqSession worker.AMPQSession) {

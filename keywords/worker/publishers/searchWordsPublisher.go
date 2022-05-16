@@ -5,8 +5,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/Khaled-Abdelal/job-crawler/crawler/data"
-	"github.com/Khaled-Abdelal/job-crawler/crawler/worker"
+	"github.com/Khaled-Abdelal/job-crawler/keywords/data"
+	"github.com/Khaled-Abdelal/job-crawler/keywords/worker"
 
 	"github.com/streadway/amqp"
 )

@@ -4,9 +4,9 @@ import (
 	"log"
 	"time"
 
-	"github.com/Khaled-Abdelal/job-crawler/crawler/data"
-	"github.com/Khaled-Abdelal/job-crawler/crawler/worker"
-	"github.com/Khaled-Abdelal/job-crawler/crawler/worker/publishers"
+	"github.com/Khaled-Abdelal/job-crawler/keywords/data"
+	"github.com/Khaled-Abdelal/job-crawler/keywords/worker"
+	"github.com/Khaled-Abdelal/job-crawler/keywords/worker/publishers"
 	"github.com/go-co-op/gocron"
 	"gorm.io/gorm"
 )

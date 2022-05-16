@@ -4,8 +4,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/Khaled-Abdelal/job-crawler/crawler/cron"
-	"github.com/Khaled-Abdelal/job-crawler/crawler/data"
 	"github.com/Khaled-Abdelal/job-crawler/crawler/worker"
 	"github.com/Khaled-Abdelal/job-crawler/crawler/worker/consumers"
 
@@ -14,11 +12,7 @@ import (
 
 func main() {
 	loadEnvFile()
-	db, _ := data.GetDBConnection()
-	data.SeedKeyWords("./data/seedKeyWords.csv", db) // seed the db with popular job key words to crawl
-	ampqSession := worker.RabbitMQSetUp()            // holds the rabbitMQ session accross the app
-	s := cron.RunSearchWordsCron(ampqSession, db)
-	go s.StartBlocking()
+	ampqSession := worker.RabbitMQSetUp() // holds the rabbitMQ session accross the app
 	consumers.SearchWordsConsume(ampqSession)
 }
 
