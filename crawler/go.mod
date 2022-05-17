@@ -1,9 +1,10 @@
 module github.com/Khaled-Abdelal/job-crawler/crawler
 
-go 1.8
+go 1.6
 
 require (
-	github.com/Khaled-Abdelal/job-crawler/keywords v0.0.0-local
+	github.com/Khaled-Abdelal/job-crawler/keywords v0.0.0-20220517083936-0a9a39b8f9ae
+	//github.com/Khaled-Abdelal/job-crawler/keywords v0.0.0-local
 	github.com/PuerkitoBio/goquery v1.8.0 // indirect
 	github.com/antchfx/htmlquery v1.2.4 // indirect
 	github.com/antchfx/xmlquery v1.3.10 // indirect
@@ -21,4 +22,4 @@ require (
 	google.golang.org/protobuf v1.28.0 // indirect
 )
 
-replace github.com/Khaled-Abdelal/job-crawler/keywords v0.0.0-local => ../keywords
+//replace github.com/Khaled-Abdelal/job-crawler/keywords v0.0.0-local => ../keywords

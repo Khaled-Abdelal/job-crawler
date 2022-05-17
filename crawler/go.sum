@@ -1,5 +1,7 @@
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
+github.com/Khaled-Abdelal/job-crawler/keywords v0.0.0-20220517083936-0a9a39b8f9ae h1:PUy7UwoMQkj9Tbi9kwA3hNtnjq/6KjnjmEUQFkpD0aA=
+github.com/Khaled-Abdelal/job-crawler/keywords v0.0.0-20220517083936-0a9a39b8f9ae/go.mod h1:A613xNp+818b1FnT/b9zstvbAHrTBz4zQi2YtlwMkoc=
 github.com/Masterminds/semver/v3 v3.1.1 h1:hLg3sBzpNErnxhQtUy/mmLR2I9foDujNK030IGemrRc=
 github.com/Masterminds/semver/v3 v3.1.1/go.mod h1:VPu/7SZ7ePZ3QOrcuXROw5FAcLl4a0cBrbBpGY/8hQs=
 github.com/PuerkitoBio/goquery v1.5.1/go.mod h1:GsLWisAFVj4WgDibEWF4pvYnkVQBpKBKeU+7zCJoLcc=
