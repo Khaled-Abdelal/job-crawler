@@ -6,7 +6,7 @@ The project is split into five components:
 
 1. [API Gateway](./api) A Golang front facing server which handles all incoming traffic.
 
-2. [Keywords](./keywords/) A Golang service which handles providing key words to be crawled.
+2. [Keywords](./keywords/) A Golang service which handles providing keywords to be crawled.
 
 3. [Crawler](./crawler/) A Golang service which handles receiving keywords and crawling different job sites for jobs then pushing them to be indexed.
 
