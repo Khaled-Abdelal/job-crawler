@@ -39,7 +39,7 @@ The project is split into five components:
 - [ ] Add frontend filter location, job source, ... etc
 - [ ] Use user search as source for new keywords
 - [ ] Add unit test
-- [ ] add CI/CD pipeline  
+- [ ] Add CI/CD pipeline  
 
 ### Want to help
 
