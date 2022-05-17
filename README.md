@@ -6,13 +6,13 @@ The project is split into five components:
 
 1. [API Gateway](./api) A Golang front facing server which handles all incoming traffic.
 
-2. [KeyWords](./keywords/) A Golang service which handles providing key words to be crawled.
+2. [Keywords](./keywords/) A Golang service which handles providing key words to be crawled.
 
 3. [Crawler](./crawler/) A Golang service which handles receiving keywords and crawling different job sites for jobs then pushing them to be indexed.
 
-4. [indexer](./indexer/) A Golang service which handles indexing and searching jobs.
+4. [Indexer](./indexer/) A Golang service which handles indexing and searching jobs.
 
-5. [frontend](./frontend/) A Next.js frontend app that provides interface for searching and listing jobs.
+5. [Frontend](./frontend/) A Next.js frontend app that provides interface for searching and listing jobs.
 
 ## Getting Started
 
