@@ -2,6 +2,8 @@
 
 A Golang service which handles receiving keywords and crawling different job sites for jobs then pushing them to be indexed.
 
+The Crawler relies on a time delay between requests to not be blocked by the providers.
+
 ## Getting Started
 
 ### Using docker
