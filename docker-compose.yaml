@@ -19,11 +19,11 @@ services:
     ports: 
       - 5432:5432
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=crawler
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: crawler
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready --username=postgres && psql --username=postgres --list"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -55,6 +55,7 @@ services:
         condition: service_healthy
     env_file:
       - ./keywords/.env.compose
+    restart: always
   indexer:
     build: ./indexer
     depends_on:

@@ -1,6 +1,7 @@
 package data
 
 import (
+	"log"
 	"os"
 	"time"
 
@@ -19,6 +20,9 @@ type SearchWord struct {
 func GetDBConnection() (*gorm.DB, error) {
 	dbConnectionString := os.Getenv("DATABASE_URL")
 	db, err := gorm.Open(postgres.Open(dbConnectionString), &gorm.Config{})
+	if err != nil {
+		log.Fatal("Error Opening Postgres connection")
+	}
 	db.AutoMigrate(&SearchWord{})
 	return db, err
 }
